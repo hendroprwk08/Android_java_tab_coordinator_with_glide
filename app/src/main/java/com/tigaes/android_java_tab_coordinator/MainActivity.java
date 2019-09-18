@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -63,6 +65,26 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu); //hanya inflate tanpa modif search view
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                Intent i = new Intent(MainActivity.this, SearchActivity.class);
+                //i.putExtra("x_nama", nama);
+                //i.putExtra("x_npm", npm);
+                //i.putExtra("x_alamat", alamat);
+                //i.putExtra("x_prodi", prodi);
+                //i.putExtra("x_teknologi", teknologi); //boolean
+                //i.putExtra("x_kuliner", kuliner); //boolean
+                //i.putExtra("x_kelas", kelas);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getApplicationContext().startActivity(i);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
 

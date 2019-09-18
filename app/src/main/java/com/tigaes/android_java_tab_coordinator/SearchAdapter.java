@@ -12,15 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
 import java.util.List;
 
-class SeafoodAdapter extends RecyclerView.Adapter<SeafoodAdapter.GridViewHolder> {
-    private List<Seafood> seafoods;
+class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.GridViewHolder> {
+    private List<Search> searches;
     private Context context;
 
-    public SeafoodAdapter(Context context, ArrayList<Seafood> seafoods) {
-        this.seafoods = seafoods;
+    public SearchAdapter(Context context, List<Search> searches) {
+        this.searches = searches;
         this.context = context;
     }
 
@@ -35,9 +34,9 @@ class SeafoodAdapter extends RecyclerView.Adapter<SeafoodAdapter.GridViewHolder>
     @Override
     public void onBindViewHolder(@NonNull GridViewHolder holder, int position) {
         //position = i;
-        final String id = seafoods.get(position).getIdMeal();
-        final String meal = seafoods.get(position).getStrMeal();
-        final String photo = seafoods.get(position).getStrMealThumb();
+        final String id = searches.get(position).getIdMeal();
+        final String meal = searches.get(position).getStrMeal();
+        final String photo = searches.get(position).getStrMealThumb();
 
         holder.tvMeal.setText(meal);
 
@@ -49,7 +48,7 @@ class SeafoodAdapter extends RecyclerView.Adapter<SeafoodAdapter.GridViewHolder>
 
     @Override
     public int getItemCount() {
-        return seafoods.size();
+        return searches.size();
     }
 
     public class GridViewHolder extends RecyclerView.ViewHolder {
