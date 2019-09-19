@@ -5,10 +5,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -37,6 +39,8 @@ public class SearchActivity extends AppCompatActivity {
     ArrayList<Search> searches;
     ProgressBar pb;
     EditText etSearch;
+    SwipeRefreshLayout srl;
+    String cari;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,30 +57,68 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         pb = (ProgressBar) findViewById(R.id.progress_horizontal);
+
         etSearch = (EditText) findViewById(R.id.editSearch);
         etSearch.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN)
+                cari = etSearch.getText().toString();
+
+                if (cari.length() == 0){
+                    Toast.makeText(getApplicationContext(), "What you want to know?", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
+                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN && cari.length() != 0)
                 {
-                    load(etSearch.getText().toString());
+                    Log.i(String.valueOf(R.string.app_name), "onKey: " + cari);
+                    load(cari);
                     return true;
                 }
                 return false;
             }
         });
 
+        overridePendingTransition(R.anim.left_in, R.anim.left_out); //transisi
+
         //autofocus edit text
         etSearch.requestFocus();
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
+        // Lookup the swipe container view
+        srl = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+
+        // Setup refresh listener which triggers new data loading
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                load(cari);
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override public void run() {
+                        // Stop animation (This will be after 1 seconds)
+                        srl.setRefreshing(false);
+                    }
+                }, 1000); // Delay in millis
+            }
+        });
+
+        // Configure the refreshing colors
+        srl.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-            finish(); // close this activity and return to preview activity (if there is any)
+            finish(); // close this activity and return to preview activity
+            overridePendingTransition(R.anim.right_in, R.anim.right_out);
         }
 
         return super.onOptionsItemSelected(item);
@@ -146,12 +188,17 @@ public class SearchActivity extends AppCompatActivity {
                 // TODO Auto-generated method stub
                 Log.d("Events: ", error.toString());
 
-                Toast.makeText(getApplicationContext(),
-                        error.toString(),
-                        Toast.LENGTH_SHORT).show();
+                pb.setVisibility(ProgressBar.GONE);
+                Toast.makeText(getApplicationContext(), "Please check your connection", Toast.LENGTH_SHORT).show();
             }
         });
 
         queue.add(jsObjRequest);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.right_in, R.anim.right_out);
     }
 }

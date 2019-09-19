@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +37,7 @@ public class SeafoodFragment extends Fragment {
     ArrayList<Seafood> seafoods;
     RecyclerView rv;
     ProgressBar pb;
+    SwipeRefreshLayout srl;
 
     public SeafoodFragment() {}
 
@@ -46,6 +49,33 @@ public class SeafoodFragment extends Fragment {
         fragment_view = rootView;
 
         pb = (ProgressBar) rootView.findViewById(R.id.progress_horizontal);
+
+        // Lookup the swipe container view
+        srl = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
+
+        // Setup refresh listener which triggers new data loading
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                load();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override public void run() {
+                        // Stop animation (This will be after 1 seconds)
+                        srl.setRefreshing(false);
+                    }
+                }, 1000); // Delay in millis
+            }
+        });
+
+        // Configure the refreshing colors
+        srl.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
         load();
 
@@ -119,9 +149,8 @@ public class SeafoodFragment extends Fragment {
                 // TODO Auto-generated method stub
                 Log.d("Events: ", error.toString());
 
-                Toast.makeText(getContext(),
-                        error.toString(),
-                        Toast.LENGTH_SHORT).show();
+                pb.setVisibility(ProgressBar.GONE);
+                Toast.makeText(getContext(), "Please check your connection", Toast.LENGTH_SHORT).show();
             }
         });
 
