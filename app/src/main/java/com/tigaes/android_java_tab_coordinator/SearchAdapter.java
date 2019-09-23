@@ -53,6 +53,8 @@ class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.GridViewHolder> {
                 Toast.makeText(context, meal, Toast.LENGTH_SHORT).show();
 
                 Intent i = new Intent(context, DetailActivity.class);
+                i.putExtra("i_idMeal", id);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(i);
             }
         });

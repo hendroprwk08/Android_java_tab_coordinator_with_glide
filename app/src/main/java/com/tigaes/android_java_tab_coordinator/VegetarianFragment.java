@@ -106,7 +106,7 @@ public class VegetarianFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getContext());
         String url = "https://www.themealdb.com/api/json/v1/1/filter.php?c=Vegetarian";
 
-        Log.i("get seafood ", "load: " + url);
+        //Log.i("get seafood ", "load: " + url);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
@@ -115,7 +115,7 @@ public class VegetarianFragment extends Fragment {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("Events: ", response.toString());
+                        //Log.d("Events: ", response.toString());
                         String id, meal, photo;
                         vegetarians = new ArrayList<>();
 

@@ -198,7 +198,8 @@ public class SearchActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        finish();
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
+        super.onBackPressed();
     }
 }
