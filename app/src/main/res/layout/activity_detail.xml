@@ -76,7 +76,7 @@
         android:id="@+id/bs_ll"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="300dp"
         app:behavior_peekHeight="30dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
         <!-- app:behavior_hideable="true" -->
@@ -116,6 +116,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="#363636"
                 android:lineSpacingExtra="10dp"
+                android:scrollbars="vertical"
                 android:id="@+id/detail_tv_ingredients"
                 android:text="Ingredients List"/>
 

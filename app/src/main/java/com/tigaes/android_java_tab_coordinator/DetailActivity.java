@@ -5,6 +5,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,6 +49,8 @@ public class DetailActivity extends AppCompatActivity {
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         tvInstruction = (TextView) findViewById(R.id.detail_tv_instruction);
         tvIngredients = (TextView) findViewById(R.id.detail_tv_ingredients);
+        tvIngredients.setMovementMethod(new ScrollingMovementMethod());
+
         fab = (FloatingActionButton) findViewById(R.id.fab);
         overridePendingTransition(R.anim.left_in, R.anim.left_out); //transisi
 
@@ -80,7 +83,7 @@ public class DetailActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         String url = "https://www.themealdb.com/api/json/v1/1/lookup.php?i=" + id;
 
-        Log.i("get detail ", "load: " + url);
+        //Log.i("get detail ", "load: " + url);
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(
                 Request.Method.GET,
@@ -125,7 +128,7 @@ public class DetailActivity extends AppCompatActivity {
                                 ingredient_note += ingredients.get(i).toString() + " " + measures.get(i).toString() + "\n";
                             }
 
-                            tvIngredients.setText(ingredient_note);
+                            tvIngredients.setText(ingredient_note.trim());
 
                             /*desserts.clear();
 
